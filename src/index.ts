@@ -26,7 +26,6 @@ const spidersCoords: SpiderCoords[] = [
 let background: Sprite;
 const spiders: Spider[] = [];
 
-// load the sprite, call setup() when completed
 app.loader
 	.onError.add((error) => console.log(error));
 app.loader
@@ -39,7 +38,6 @@ function setup() {
 
 	let spiderSpriteSheet = resources.spider.spritesheet;
 
-	// initialize background sprite
 	background = new Sprite(resources['background.png'].texture);
 
 	if (spiderSpriteSheet?.animations.spiderIdle && spiderSpriteSheet?.animations.spiderDeath) {
@@ -55,7 +53,6 @@ function setup() {
 	app.stage.addChild(background);
 	app.stage.addChild(...spiders);
 
-	// scale stage container that it fits into the view
 	app.stage.scale.x = app.view.width / background.width;
 	app.stage.scale.y = app.view.height / background.height;
 }
