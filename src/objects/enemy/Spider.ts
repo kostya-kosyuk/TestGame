@@ -14,16 +14,20 @@ export class Spider extends AnimatedSprite {
         coords: SpiderCoords,
         idleAnim: Texture<Resource>[],
         deathAnim: Texture<Resource>[],
+        deathCallback: (spider: Spider) => void,
     ) {
         super(idleAnim);
 
-        this.x = coords.x;
+        this.x = coords.x - this.width * 2;
         this.y = coords.y;
 
         this.scale.set(getRandomNumber(minScaleRetio, maxScaleRetio));
+
         if (getRandomBoolean()) {
             this.scale.x *= -1;
+            this.x = coords.x + this.width / 1.5;
         }
+
         this.interactive = true;
 
         this.animationSpeed = getRandomNumber(minAnimSpeed, maxAnimSpeed);
@@ -31,7 +35,9 @@ export class Spider extends AnimatedSprite {
 
         this.on('pointertap', () => {
             this.loop = false;
-            this.interactive = true;
+            this.interactive = false;
+
+            deathCallback(this);
 
             this.textures = deathAnim;
 

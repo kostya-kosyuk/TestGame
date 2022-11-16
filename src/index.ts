@@ -1,6 +1,11 @@
 import { Application, Sprite, settings, SCALE_MODES } from 'pixi.js'
 import { Spider } from './objects/enemy/Spider';
+import { ScoreText } from './objects/ScoreText';
 import { SpiderCoords } from './types/SpiderCoords';
+
+type Spiders = {
+	spidersArray: Spider[],
+};
 
 const app = new Application({
 	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
@@ -12,25 +17,16 @@ const app = new Application({
 
 settings.SCALE_MODE = SCALE_MODES.NEAREST;
 
-const spidersCoords: SpiderCoords[] = [
-	{
-		x: 100,
-		y: 100,
-	},
-	{
-		x: 200,
-		y: 200,
-	},
-];
-
 let background: Sprite;
-const spiders: Spider[] = [];
+const spiders: Spiders = { spidersArray: []};
+
 
 app.loader
 	.onError.add((error) => console.log(error));
 app.loader
 	.add('background.png')
 	.add('spider', 'spider.json')
+	.add('enemiesList', 'enemiesList.json')
 	.load(setup);
 
 function setup() {
@@ -40,18 +36,34 @@ function setup() {
 
 	background = new Sprite(resources['background.png'].texture);
 
+	const spidersCoords: SpiderCoords[] = resources.enemiesList.data.enemies;
+
+	console.log(spidersCoords);
+
+	const spawnCount = spidersCoords.length;
+	const score = new ScoreText(
+		spawnCount,
+		(left: number) => `Enemies: ${left}`,
+	);
+	const handleSpiderDeath = (spider: Spider) => {
+		spiders.spidersArray = spiders.spidersArray.filter((currentSpider) => currentSpider !== spider);
+		score.setText(spiders.spidersArray.length);
+	}
+
 	if (spiderSpriteSheet?.animations.spiderIdle && spiderSpriteSheet?.animations.spiderDeath) {
 		for (const coords of spidersCoords) {
-			spiders.push(new Spider(
+			spiders.spidersArray.push(new Spider(
 				coords,
 				spiderSpriteSheet.animations.spiderIdle,
-				spiderSpriteSheet?.animations.spiderDeath
+				spiderSpriteSheet?.animations.spiderDeath,
+				handleSpiderDeath,
 			));
 		}
 	}
 
 	app.stage.addChild(background);
-	app.stage.addChild(...spiders);
+	app.stage.addChild(...spiders.spidersArray);
+	app.stage.addChild(score);
 
 	app.stage.scale.x = app.view.width / background.width;
 	app.stage.scale.y = app.view.height / background.height;
