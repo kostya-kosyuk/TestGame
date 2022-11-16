@@ -11,8 +11,7 @@ const app = new Application({
 	view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
 	resolution: window.devicePixelRatio || 1,
 	autoDensity: true,
-	width: 1000,
-	height: 650
+	resizeTo: window,
 });
 
 settings.SCALE_MODE = SCALE_MODES.NEAREST;
@@ -38,14 +37,14 @@ function setup() {
 
 	const spidersCoords: SpiderCoords[] = resources.enemiesList.data.enemies;
 
-	console.log(spidersCoords);
-
 	const spawnCount = spidersCoords.length;
 	const score = new ScoreText(
 		spawnCount,
 		(left: number) => `Enemies: ${left}`,
 	);
+
 	const handleSpiderDeath = (spider: Spider) => {
+		spider.setParent
 		spiders.spidersArray = spiders.spidersArray.filter((currentSpider) => currentSpider !== spider);
 		score.setText(spiders.spidersArray.length);
 	}
@@ -62,8 +61,10 @@ function setup() {
 	}
 
 	app.stage.addChild(background);
-	app.stage.addChild(...spiders.spidersArray);
 	app.stage.addChild(score);
+	app.stage.addChild(...spiders.spidersArray);
+
+
 
 	app.stage.scale.x = app.view.width / background.width;
 	app.stage.scale.y = app.view.height / background.height;

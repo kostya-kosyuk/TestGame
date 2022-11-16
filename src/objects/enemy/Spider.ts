@@ -46,7 +46,5 @@ export class Spider extends AnimatedSprite {
                 this.parent.removeChild(this)
             }, 500);
         })
-
-        console.log(`${this.x}:${this.y}`);
     };
 };

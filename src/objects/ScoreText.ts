@@ -9,7 +9,6 @@ export class ScoreText extends Text{
             initiate: number,
         ) => string) {
         super(getTextCallback(initiateValue));
-        this.x = 1300;
         this.y = 10;
         this.style = new TextStyle({
             fill: 0xFFFFFF,
