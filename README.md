@@ -1,10 +1,8 @@
-# Test Game
+# Click your enemy!
 
 [DEMO LINK](https://kostya-kosyuk.github.io/TestGame/)
 
 <hr />
-
-Click your enemy!
 
 Implemented using:
   - JavaScript
